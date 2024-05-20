@@ -10,16 +10,21 @@ export const createTask = async (createBody, user) => {
   });
 };
 
-export const getAllTask = async (filter, options) => {
+export const getAllTask = async (filter, options, user) => {
   const { page, limit } = options;
 
-  const tasks = await TaskModel.paginate(
-    {},
-    {
-      page,
-      limit,
-    },
-  );
+  const paginateFilter = {
+    // createdBy: user._id,
+  };
+
+  if (filter.status) {
+    paginateFilter.status = filter.status;
+  }
+
+  const tasks = await TaskModel.paginate(paginateFilter, {
+    page,
+    limit,
+  });
 
   return tasks;
 };

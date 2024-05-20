@@ -10,6 +10,5 @@ router.post('/login', validate(authValidation.login), authController.login);
 router.post('/register', validate(authValidation.register), authController.register);
 router.use(authentication);
 router.post('/logout', authController.logout);
-router.put('/change-password', authController.changePassword);
 
 export default router;

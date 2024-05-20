@@ -16,10 +16,6 @@ const taskSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    order: {
-      type: String,
-      require: true,
-    },
     status: {
       type: String,
       enum: TASK_STATUS,
@@ -29,11 +25,6 @@ const taskSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'user',
       required: true,
-    },
-    isDeleted: {
-      type: Boolean,
-      required: true,
-      default: false,
     },
   },
   {

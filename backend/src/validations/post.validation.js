@@ -1,7 +1,6 @@
 import Joi from 'joi';
-import { TASK_STATUS } from '../constants/index.js';
 
-export const createTask = {
+export const createPost = {
   body: Joi.object().keys({
     banner: Joi.string().uri(),
     title: Joi.string().required(),
@@ -9,34 +8,32 @@ export const createTask = {
   }),
 };
 
-export const getAllTask = {
+export const getAllPost = {
   query: Joi.object().keys({
     limit: Joi.string().default(10),
     page: Joi.string().default(1),
-    status: Joi.string().valid(...TASK_STATUS),
   }),
 };
 
-export const getTaskById = {
+export const getPostById = {
   params: Joi.object().keys({
-    taskId: Joi.string().required(),
+    postId: Joi.string().required(),
   }),
 };
 
-export const updateTask = {
+export const updatePost = {
   params: Joi.object().keys({
-    taskId: Joi.string().required(),
+    postId: Joi.string().required(),
   }),
   body: Joi.object().keys({
     banner: Joi.string(),
     title: Joi.string(),
     description: Joi.string(),
-    status: Joi.string(),
   }),
 };
 
-export const deleteTask = {
+export const deletePost = {
   params: Joi.object().keys({
-    taskId: Joi.string().required(),
+    postId: Joi.string().required(),
   }),
 };

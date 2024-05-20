@@ -11,10 +11,10 @@ export const createTask = asyncHandler(async (req, res) => {
 });
 
 export const getAllTask = asyncHandler(async (req, res) => {
-  const filter = pick(req.query, []);
+  const filter = pick(req.query, ['status']);
   const options = pick(req.query, ['sortBy', 'page', 'limit']);
 
-  const task = await taskService.getAllTask(filter, options);
+  const task = await taskService.getAllTask(filter, options, req.user);
 
   return res.status(httpStatus.OK).json(apiResponse(httpStatus.OK, httpStatus[httpStatus.OK], task));
 });

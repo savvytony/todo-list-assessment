@@ -26,5 +26,3 @@ export const logout = asyncHandler(async (req, res) => {
 
   return res.status(httpStatus.OK).json(apiResponse(httpStatus.OK, 'Logout successfully'));
 });
-
-export const changePassword = asyncHandler(async (_req, _res) => {});
