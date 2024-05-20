@@ -5,7 +5,7 @@ import path from 'path';
 import __dirname from '../utils/dirname.js';
 
 dotenv.config({
-  path: path.join(__dirname, `../../.env.${process.env.NODE_ENV}`),
+  path: path.join(__dirname, `../../.env`),
 });
 
 const envVarsScheme = Joi.object()
