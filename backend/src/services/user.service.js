@@ -9,10 +9,14 @@ export const createUser = async ({ username, password }) => {
     throw new BadRequestError('Username already taken');
   }
 
-  return UserModel.create({
+  const user = await UserModel.create({
     username,
     password,
   });
+
+  user.password = undefined;
+
+  return user;
 };
 
 export const getUserById = async (userId) => {

@@ -8,16 +8,12 @@ export const login = asyncHandler(async (req, res) => {
   const user = await authService.login(req.body);
   const accessToken = await tokenService.signAccessToken(user);
 
-  user.password = undefined;
-
   return res.respond({ accessToken, user });
 });
 
 export const register = asyncHandler(async (req, res) => {
   const user = await userService.createUser(req.body);
   const accessToken = await tokenService.signAccessToken(user);
-
-  user.password = undefined;
 
   return res.respond({ accessToken, user });
 });

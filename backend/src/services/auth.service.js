@@ -15,6 +15,8 @@ export const login = async ({ username, password }) => {
     throw new UnauthorizedError('Incorrect password');
   }
 
+  user.password = undefined;
+
   return user;
 };
 
