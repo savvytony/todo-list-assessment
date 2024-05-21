@@ -6,7 +6,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 export const createPost = asyncHandler(async (req, res) => {
   const post = await postService.createPost(req.body, req.user);
 
-  return res.respond(post, httpStatus[httpStatus.CREATED], httpStatus.CREATED);
+  return res.respond(post, httpStatus.CREATED);
 });
 
 export const getAllPost = asyncHandler(async (req, res) => {

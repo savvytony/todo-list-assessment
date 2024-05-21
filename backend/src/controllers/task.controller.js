@@ -6,7 +6,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 export const createTask = asyncHandler(async (req, res) => {
   const task = await taskService.createTask(req.body, req.user);
 
-  return res.respond(task, httpStatus[httpStatus.CREATED], httpStatus.CREATED);
+  return res.respond(task, httpStatus.CREATED);
 });
 
 export const getAllTask = asyncHandler(async (req, res) => {

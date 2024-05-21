@@ -10,7 +10,7 @@ export const login = asyncHandler(async (req, res) => {
 
   user.password = undefined;
 
-  return res.respond({ accessToken, user }, 'Login successfully');
+  return res.respond({ accessToken, user });
 });
 
 export const register = asyncHandler(async (req, res) => {
@@ -19,7 +19,7 @@ export const register = asyncHandler(async (req, res) => {
 
   user.password = undefined;
 
-  return res.respond({ accessToken, user }, 'Register successfully');
+  return res.respond({ accessToken, user });
 });
 
 export const logout = asyncHandler(async (req, res) => {
@@ -27,5 +27,5 @@ export const logout = asyncHandler(async (req, res) => {
 
   await authService.logout(token);
 
-  return res.respond('Logout successfully');
+  return res.respond();
 });

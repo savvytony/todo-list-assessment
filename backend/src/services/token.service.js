@@ -41,11 +41,17 @@ export const signAccessToken = async (user) => {
 };
 
 export const isTokenRevoked = async (token) => {
-  const blackList = await redisClient.SISMEMBER(TOKEN_BLACK_LIST_CACHE_KEY, token);
+  const payload = jwt.verify(token, config.jwt.secret);
 
-  return blackList;
+  const isRevoked = await redisClient.get(`${TOKEN_BLACK_LIST_CACHE_KEY}:${payload.sub}:${payload.exp}`);
+
+  return isRevoked;
 };
 
 export const revokeToken = async (token) => {
-  return redisClient.SADD(TOKEN_BLACK_LIST_CACHE_KEY, token);
+  const payload = jwt.verify(token, config.jwt.secret);
+
+  await redisClient.set(`${TOKEN_BLACK_LIST_CACHE_KEY}:${payload.sub}:${payload.exp}`, 1, {
+    EXAT: payload.exp,
+  });
 };
