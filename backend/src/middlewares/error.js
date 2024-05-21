@@ -35,5 +35,5 @@ export const errorHandler = (err, req, res, _next) => {
     logger.error(err.stack);
   }
 
-  return res.errorResponse(statusCode, message, err.stack);
+  return res.respond(err.stack, message, statusCode);
 };

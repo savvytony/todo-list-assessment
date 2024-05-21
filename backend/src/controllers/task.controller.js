@@ -6,7 +6,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 export const createTask = asyncHandler(async (req, res) => {
   const task = await taskService.createTask(req.body, req.user);
 
-  return res.successResponse(httpStatus.CREATED, httpStatus[httpStatus.CREATED], task);
+  return res.respond(task, httpStatus[httpStatus.CREATED], httpStatus.CREATED);
 });
 
 export const getAllTask = asyncHandler(async (req, res) => {
@@ -15,23 +15,23 @@ export const getAllTask = asyncHandler(async (req, res) => {
 
   const task = await taskService.getAllTask(filter, options, req.user);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], task);
+  return res.respond(task);
 });
 
 export const getTaskById = asyncHandler(async (req, res) => {
   const task = await taskService.getTaskById(req.params.taskId);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], task);
+  return res.respond(task);
 });
 
 export const updateTask = asyncHandler(async (req, res) => {
   const task = await taskService.updateTaskById(req.params.taskId, req.body);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], task);
+  return res.respond(task);
 });
 
 export const deleteTask = asyncHandler(async (req, res) => {
-  const task = await taskService.deleteTaskById(req.params.taskId);
+  await taskService.deleteTaskById(req.params.taskId);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], task);
+  return res.respond();
 });

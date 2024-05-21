@@ -6,7 +6,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 export const createPost = asyncHandler(async (req, res) => {
   const post = await postService.createPost(req.body, req.user);
 
-  return res.successResponse(httpStatus.CREATED, httpStatus[httpStatus.CREATED], post);
+  return res.respond(post, httpStatus[httpStatus.CREATED], httpStatus.CREATED);
 });
 
 export const getAllPost = asyncHandler(async (req, res) => {
@@ -15,23 +15,23 @@ export const getAllPost = asyncHandler(async (req, res) => {
 
   const post = await postService.getAllPost(filter, options);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], post);
+  return res.respond(post);
 });
 
 export const getPostById = asyncHandler(async (req, res) => {
   const post = await postService.getPostById(req.params.postId);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], post);
+  return res.respond(post);
 });
 
 export const updatePost = asyncHandler(async (req, res) => {
   const post = await postService.updatePostById(req.params.postId, req.body);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], post);
+  return res.respond(post);
 });
 
 export const deletePost = asyncHandler(async (req, res) => {
-  const post = await postService.deletePostById(req.params.postId);
+  await postService.deletePostById(req.params.postId);
 
-  return res.successResponse(httpStatus.OK, httpStatus[httpStatus.OK], post);
+  return res.respond();
 });

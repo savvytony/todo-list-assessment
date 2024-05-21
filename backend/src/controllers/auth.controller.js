@@ -1,4 +1,3 @@
-import httpStatus from 'http-status';
 import * as authService from '../services/auth.service.js';
 import * as tokenService from '../services/token.service.js';
 import * as userService from '../services/user.service.js';
@@ -11,7 +10,7 @@ export const login = asyncHandler(async (req, res) => {
 
   user.password = undefined;
 
-  return res.successResponse(httpStatus.OK, 'Login successfully', { accessToken, user });
+  return res.respond({ accessToken, user }, 'Login successfully');
 });
 
 export const register = asyncHandler(async (req, res) => {
@@ -20,7 +19,7 @@ export const register = asyncHandler(async (req, res) => {
 
   user.password = undefined;
 
-  return res.successResponse(httpStatus.OK, 'Register successfully', { accessToken, user });
+  return res.respond({ accessToken, user }, 'Register successfully');
 });
 
 export const logout = asyncHandler(async (req, res) => {
@@ -28,5 +27,5 @@ export const logout = asyncHandler(async (req, res) => {
 
   await authService.logout(token);
 
-  return res.successResponse(httpStatus.OK, 'Logout successfully');
+  return res.respond('Logout successfully');
 });
