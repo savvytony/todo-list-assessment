@@ -18,6 +18,6 @@ export const login = async ({ username, password }) => {
   return user;
 };
 
-export const logout = async (user) => {
-  await tokenService.revokeToken(user);
+export const logout = async (token) => {
+  await tokenService.revokeToken(token);
 };

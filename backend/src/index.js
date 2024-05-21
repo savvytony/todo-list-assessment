@@ -6,6 +6,7 @@ import process from 'node:process';
 import config from './configs/config.js';
 import { errorConverter, errorHandler, invalidApiHandler } from './middlewares/error.js';
 import routes from './routes/index.js';
+import customResponse from './utils/customResponse.js';
 import logger from './utils/logger.js';
 import { morganError, morganSuccess } from './utils/morgan.js';
 
@@ -24,6 +25,8 @@ app.use(compression());
 
 app.use(cors());
 app.options('*', cors());
+
+app.use(customResponse)
 
 app.use('/api', routes);
 

@@ -2,27 +2,24 @@ import UnauthorizedError from '../errors/UnauthorizedError.js';
 import * as tokenService from '../services/token.service.js';
 import * as userService from '../services/user.service.js';
 import asyncHandler from '../utils/asyncHandler.js';
+import extractTokenFromRequest from '../utils/extractTokenFromRequest.js';
 
 const authentication = asyncHandler(async (req, res, next) => {
-  const { authorization } = req.headers;
+  const token = extractTokenFromRequest(req);
 
-  if (!authorization) {
+  if (!token) {
     throw new UnauthorizedError();
   }
 
-  const [type, token] = authorization.split(' ');
+  const isTokenRevoked = await tokenService.isTokenRevoked(token);
 
-  if (type.toLowerCase() !== 'bearer') {
-    throw new UnauthorizedError('Authentication type wrong');
-  }
-
-  if (!token) {
-    throw new UnauthorizedError('Token is empty');
+  if (isTokenRevoked) {
+    throw new UnauthorizedError();
   }
 
   const decode = await tokenService.verifyToken(token);
 
-  const user = await userService.getUserById(decode.user);
+  const user = await userService.getUserById(decode.sub);
 
   if (user) {
     user.password = undefined;

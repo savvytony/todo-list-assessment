@@ -1,27 +1,22 @@
 import dayjs from 'dayjs';
 import jwt from 'jsonwebtoken';
 import config from '../configs/config.js';
+import redisClient from '../configs/redis.js';
+import { TOKEN_BLACK_LIST_CACHE_KEY } from '../constants/index.js';
 import UnauthorizedError from '../errors/UnauthorizedError.js';
-import TokenModel from '../models/token.model.js';
 
 export const signToken = async (userId, expires) => {
-  const token = await TokenModel.create({
-    expiredAt: expires,
-    user: userId,
-  });
-
   const payload = {
     sub: userId,
     iat: dayjs().unix(),
     exp: expires.unix(),
-    jti: token._id,
   };
 
   return jwt.sign(payload, config.jwt.secret);
 };
 
 export const verifyToken = async (token) => {
-  const payload = jwt.verify(token, config.jwt.secret, (error, decode) => {
+  return jwt.verify(token, config.jwt.secret, (error, decode) => {
     if (!error) {
       return decode;
     }
@@ -35,21 +30,6 @@ export const verifyToken = async (token) => {
         throw new UnauthorizedError(error.message);
     }
   });
-
-  const tokenDoc = await TokenModel.findOne({
-    _id: payload.jti,
-    user: payload.sub,
-    revokedAt: null,
-    expiredAt: {
-      $gte: dayjs().unix(),
-    },
-  });
-
-  if (!tokenDoc) {
-    throw new UnauthorizedError();
-  }
-
-  return tokenDoc;
 };
 
 export const signAccessToken = async (user) => {
@@ -60,14 +40,12 @@ export const signAccessToken = async (user) => {
   return signToken(user._id, accessTokenExpires);
 };
 
-export const revokeToken = async (user) => {
-  await TokenModel.updateMany(
-    {
-      user: user._id,
-      revokedAt: null,
-    },
-    {
-      revokedAt: dayjs().unix(),
-    },
-  );
+export const isTokenRevoked = async (token) => {
+  const blackList = await redisClient.SISMEMBER(TOKEN_BLACK_LIST_CACHE_KEY, token);
+
+  return blackList;
+};
+
+export const revokeToken = async (token) => {
+  return redisClient.SADD(TOKEN_BLACK_LIST_CACHE_KEY, token);
 };

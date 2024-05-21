@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
-import config from '../configs/config.js';
 import ApiError from '../errors/ApiError.js';
+import { isDev, isProd } from '../utils/checkEnv.js';
 import logger from '../utils/logger.js';
 
 export const invalidApiHandler = (req, res, next) =>
@@ -24,20 +24,16 @@ export const errorConverter = (err, req, res, next) => {
 export const errorHandler = (err, req, res, _next) => {
   let { statusCode, message } = err;
 
-  if (config.env === 'production' && !err.isOperational) {
+  if (isProd() && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
   }
 
   res.locals.errorMessage = err.message;
 
-  const response = {
-    status: statusCode,
-    message,
-    ...(config.env === 'development' && { stack: err.stack }),
-  };
+  if (isDev()) {
+    logger.error(err.stack);
+  }
 
-  logger.error(err);
-
-  return res.status(statusCode).json(response);
+  return res.errorResponse(statusCode, message, err.stack);
 };
